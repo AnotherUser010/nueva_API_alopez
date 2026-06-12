@@ -54,7 +54,7 @@ app.delete('/usuarios/:id', async (req, res) => {
 });
 
 // LISTEN
-const PORT = 6025;
+const PORT = 6025; // Puerto a usar
 app.listen(PORT, () => {
   console.log(`Servidor de Usuarios escuchando en http://localhost:${PORT}`);
 });
