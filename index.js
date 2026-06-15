@@ -26,16 +26,22 @@ app.get('/usuarios', async (req, res) => {
 // POST - Crear usuario
 app.post('/usuarios', async (req, res) => {
   try {
-    const { nombre, apaterno, amaterno, edad, telefono, email } = req.body;
-    
-    if (!nombre || !apaterno) {
+    const { nombre, apellido_paterno, apellido_materno, edad } = req.body;
+
+    if (!nombre || !apellido_paterno) {
       return res.status(400).json({ error: 'Nombre y apellido paterno son requeridos' });
     }
-    
+
     const nuevo = await pool.query(
-      'INSERT INTO usuarios (nombre, apaterno, amaterno, edad, telefono, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [nombre, apaterno, amaterno || null, edad || null, telefono || null, email || null]
+      'INSERT INTO usuarios (nombre, apellido_paterno, apellido_materno, edad) VALUES ($1, $2, $3, $4) RETURNING *',
+      [
+        nombre,
+        apellido_paterno,
+        apellido_materno || null,
+        edad || null
+      ]
     );
+
     res.status(201).json(nuevo.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -54,7 +60,7 @@ app.delete('/usuarios/:id', async (req, res) => {
 });
 
 // LISTEN
-const PORT = 6025; // Puerto a usar
+const PORT = 6024; // Puerto a usar
 app.listen(PORT, () => {
   console.log(`Servidor de Usuarios escuchando en http://localhost:${PORT}`);
 });
